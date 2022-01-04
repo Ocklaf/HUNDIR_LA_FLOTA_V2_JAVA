@@ -318,17 +318,17 @@ public class Hundirlaflota {
         
         if(datosJuego[0] == 0 && datosJuego[1] == 0){//Si con el último misil impactamos en la última posición VICTORIA
             System.out.println("\n\nMi capitán... HEMOS GANADO!!... hemos HUNDIDO LA FLOTA enemiga!!!\n"
-                    + "Estas eran las posiciones de nuestro enemigo:");
+                    + "Estas eran las posiciones de nuestro enemigo:\n");
             verTablero(jugadorPC, dimensionTablero);
         }
         else if(datosJuego[1] == 0){//Todos impactados VICTORIA
             System.out.println("\n\nMi capitán... HEMOS GANADO!!... hemos HUNDIDO LA FLOTA enemiga!!!\n"
-                    + "Estas eran las posiciones de nuestro enemigo:");
+                    + "Estas eran las posiciones de nuestro enemigo:\n");
             verTablero(jugadorPC, dimensionTablero);
         }
         else if(datosJuego[0] == 0){//Si no quedan misiles... lamentablemente... FIN             
             System.out.println("\n\nMi capitán... HEMOS PERDIDO!!... no tenemos más misiles\n"
-                    + "Estas eran las posiciones de nuestro enemigo:");
+                    + "Estas eran las posiciones de nuestro enemigo:\n");
             verTablero(jugadorPC, dimensionTablero);
         }
     }    
