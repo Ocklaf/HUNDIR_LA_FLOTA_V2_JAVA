@@ -55,7 +55,7 @@ public class Hundirlaflota {
         switch(dificultadElegida){
             case 0://Salir
                 System.out.println("Hasta pronto mi capitán!!");
-                break;
+            break;
                 
             case 1://Fácil
                 llenadoInicialTableros(jugadorPC);
@@ -69,7 +69,7 @@ public class Hundirlaflota {
                 //verTablero(jugadorPC, dimensionTablero);//NOTA: Para ver el tablero del PC descomentar esta línea de código
                 verTablero(jugadorHumano, dimensionTablero);
                 jugandoPartida(datosJuego, jugadorPC, jugadorHumano, dimensionTablero);                
-                break;
+            break;
                 
             case 2://Medio
                 llenadoInicialTableros(jugadorPC);
@@ -83,7 +83,7 @@ public class Hundirlaflota {
                 //verTablero(jugadorPC, dimensionTablero);//NOTA: Para ver el tablero del PC descomentar esta línea de código
                 verTablero(jugadorHumano, dimensionTablero);
                 jugandoPartida(datosJuego, jugadorPC, jugadorHumano, dimensionTablero);        
-                break;
+            break;
                 
             case 3://Difícil
                 llenadoInicialTableros(jugadorPC);
@@ -95,7 +95,7 @@ public class Hundirlaflota {
                 //verTablero(jugadorPC, dimensionTablero);//NOTA: Para ver el tablero del PC descomentar esta línea de código
                 verTablero(jugadorHumano, dimensionTablero);
                 jugandoPartida(datosJuego, jugadorPC, jugadorHumano, dimensionTablero);        
-                break;
+            break;
                 
             case 4://Nivel Personalizado     
                 do{
@@ -316,11 +316,20 @@ public class Hundirlaflota {
         
         datosJuego[0] -= 1;//Quitamos el misil que ha impactado/agua
         
-        if(datosJuego[0] == 0 && datosJuego[1] == 0)//Si con el último misil impactamos en la última posición VICTORIA
-            System.out.println("\n\nMi capitán... HEMOS GANADO!!... hemos HUNDIDO LA FLOTA enemiga!!!");
-        else if(datosJuego[1] == 0)//Todos impactados VICTORIA
-            System.out.println("\n\nMi capitán... HEMOS GANADO!!... hemos HUNDIDO LA FLOTA enemiga!!!");
-        else if(datosJuego[0] == 0)//Si no quedan misiles... lamentablemente... FIN 
-            System.out.println("\n\nMi capitán... HEMOS PERDIDO!!... no tenemos más misiles");
+        if(datosJuego[0] == 0 && datosJuego[1] == 0){//Si con el último misil impactamos en la última posición VICTORIA
+            System.out.println("\n\nMi capitán... HEMOS GANADO!!... hemos HUNDIDO LA FLOTA enemiga!!!\n"
+                    + "Estas eran las posiciones de nuestro enemigo:");
+            verTablero(jugadorPC, dimensionTablero);
+        }
+        else if(datosJuego[1] == 0){//Todos impactados VICTORIA
+            System.out.println("\n\nMi capitán... HEMOS GANADO!!... hemos HUNDIDO LA FLOTA enemiga!!!\n"
+                    + "Estas eran las posiciones de nuestro enemigo:");
+            verTablero(jugadorPC, dimensionTablero);
+        }
+        else if(datosJuego[0] == 0){//Si no quedan misiles... lamentablemente... FIN             
+            System.out.println("\n\nMi capitán... HEMOS PERDIDO!!... no tenemos más misiles\n"
+                    + "Estas eran las posiciones de nuestro enemigo:");
+            verTablero(jugadorPC, dimensionTablero);
+        }
     }    
 }
