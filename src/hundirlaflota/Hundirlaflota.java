@@ -36,54 +36,15 @@ public class Hundirlaflota {
                 + "1. Fácil: tu enemigo tiene 5 Lanchas, 3 Buques, 1 Acorazado y 1 Portaaviones. Dispones de 50 misiles\n"
                 + "2. Medio: tu enemigo tiene 2 Lanchas, 1 Buque, 1 Acorazado y 1 Portaaviones. Dispones de 30 misiles\n"
                 + "3. Difícil: tu enemigo tiene 1 Lancha y 1 Buque. Dispones de 10 misiles.\n"
-                + "4. Personalizada: elige las cantidades de cada tipo de barco, así como el nº de misiles.");
+                + "4. Personalizada: elige dimensión del tablero, elige el número de barcos en función del tamaño del tablero y el nº de misiles.\n"
+                + "0. Salir del juego.");
             dificultadElegida = input.nextInt();
-        }while(dificultadElegida < 1 || dificultadElegida > 4);//Repetimos mientras no nos de una opción de menú válida
+        }while(dificultadElegida < 0 || dificultadElegida > 4);//Repetimos mientras no nos de una opción de menú válida
         
-        switchCaseDificultad(dificultadElegida, datosJuego);
-              
-      //  verTablero(jugadorPC);//NOTA: Para ver el tablero del PC descomentar esta línea de código
-      //  verTablero(jugadorHumano);
- 
+        switchCaseDificultad(dificultadElegida, datosJuego); 
     }
     
     //****************** FUNCIONES *******************  
-    
-    //Función que controla la partida, mientras queden misiles o barcos por hundir... estaremos jugando
-    public static void jugandoPartida(int datosJuego[], char jugadorPC[][], char jugadorHumano[][], int dimensionTablero){
-        Scanner input = new Scanner(System.in);
-        char charCoordenadaX = 'z';
-        boolean okCoordenadaX = false;
-        int coordenadaX, coordenadaY;
-        String coordenadasValidasX = "abcdefghijklmnñ";//String con las coordenadas válidas en X
-      
-        while(datosJuego[0] > 0 && datosJuego[1] > 0){//Posición 0 tenemos los misiles, posición 1 los impactos
-            //Mostramos marcador de Misiles restantes y los impactos necesarios para la victoria                
-            System.out.println("\nTenemos: " + datosJuego[0] + " misiles y deberíamos dar en el blanco " + datosJuego[1] + " veces para ganar\n");
-            while(okCoordenadaX == false){ //Mientras no me de una coordenada correcta del eje X válida
-                System.out.println("Dame la coordenada de disparo X (A - " + coordenadasValidasX.toUpperCase().charAt(dimensionTablero-1) + ")");
-                charCoordenadaX = input.nextLine().toLowerCase().charAt(0);
-                //A continuación verificamos que lo recogido como char por teclado está dentro del String de coordenadasValidasX
-                if(coordenadasValidasX.indexOf(charCoordenadaX)>=0)
-                    okCoordenadaX = true;//Si existe, salimos del while.
-            }
-            do{
-                System.out.println("Dame la coordenada de disparo en eje Y (0 - " + (dimensionTablero-1) + ")");
-                coordenadaY = input.nextInt();
-                input.nextLine();
-            }while(coordenadaY < 0 || coordenadaY > (dimensionTablero-1));           
-            
-            coordenadaX = coordenadasValidasX.indexOf(charCoordenadaX);//Obtengo la equivalencia del carácter en coordenada numérica para la matriz
-            disparoMisil(jugadorPC, jugadorHumano, coordenadaX, coordenadaY, datosJuego, dimensionTablero);//Lanzamos el misil con todos los datos
-            okCoordenadaX = false;//Volvemos a poner el "interruptor" a false para entrar a pedir coordenada X
-        }
-    }
-     
-    //Lleno inicial de '-' ambas matrices por filas, tratándolo como vectores cada fila y usar el .fill
-    public static void llenadoInicialTableros(char jugador[][]){
-        for(int i=0; i<jugador.length; i++) 
-            Arrays.fill(jugador[i], '-');//Relleno por filas y no recorriendo la matriz con el método de vectores .fill
-    }
     
     //Con la dificultad seleccionada rellenamos el tablero en función de la misma, si es personalizada, solicitamos los datos
     public static void switchCaseDificultad(int dificultadElegida, int datosJuego[]){
@@ -92,30 +53,34 @@ public class Hundirlaflota {
         Scanner input = new Scanner(System.in);
         
         switch(dificultadElegida){
+            case 0://Salir
+                System.out.println("Hasta pronto mi capitán!!");
+                break;
+                
             case 1://Fácil
                 llenadoInicialTableros(jugadorPC);
                 llenadoInicialTableros(jugadorHumano);
-                colocaHorizontal(jugadorPC, 5, 'L', 1, 10); //1 casilla Lancha (Horizontal o Vertical es indiferente, lo mando a Horizontal) x 5 Lanchas
-                colocaHorizontal(jugadorPC, 3, 'B', 3, 10); //3 casillas HORIZONTALES Buque x 3 Buques
-                colocaHorizontal(jugadorPC, 1, 'Z', 4, 10); //4 casillas HORIZONTALES Acorazado x 1 Acorazado
-                colocaVertical(jugadorPC, 1, 'P', 5, 10); //5 casillas VERTICALES Portaaviones x 1 Portaaviones
+                colocaHorizontal(jugadorPC, 5, 'L', 1, dimensionTablero); //1 casilla Lancha (Horizontal o Vertical es indiferente, lo mando a Horizontal) x 5 Lanchas
+                colocaHorizontal(jugadorPC, 3, 'B', 3, dimensionTablero); //3 casillas HORIZONTALES Buque x 3 Buques
+                colocaHorizontal(jugadorPC, 1, 'Z', 4, dimensionTablero); //4 casillas HORIZONTALES Acorazado x 1 Acorazado
+                colocaVertical(jugadorPC, 1, 'P', 5, dimensionTablero); //5 casillas VERTICALES Portaaviones x 1 Portaaviones
                 datosJuego[0] = 50;//Misiles para esta dificultad
                 datosJuego[1] = 23;//23 TOCADO para saber que hemos hundido todos (Casillas de cada Barco x Cantidad)                
-                verTablero(jugadorPC, dimensionTablero);//NOTA: Para ver el tablero del PC descomentar esta línea de código
+                //verTablero(jugadorPC, dimensionTablero);//NOTA: Para ver el tablero del PC descomentar esta línea de código
                 verTablero(jugadorHumano, dimensionTablero);
-                jugandoPartida(datosJuego, jugadorPC, jugadorHumano, dimensionTablero);
-                
+                jugandoPartida(datosJuego, jugadorPC, jugadorHumano, dimensionTablero);                
                 break;
+                
             case 2://Medio
                 llenadoInicialTableros(jugadorPC);
                 llenadoInicialTableros(jugadorHumano);
-                colocaHorizontal(jugadorPC, 2, 'L', 1, 10); 
-                colocaHorizontal(jugadorPC, 1, 'B', 3, 10); 
-                colocaHorizontal(jugadorPC, 1, 'Z', 4, 10); 
-                colocaVertical(jugadorPC, 1, 'P', 5, 10); 
+                colocaHorizontal(jugadorPC, 2, 'L', 1, dimensionTablero); 
+                colocaHorizontal(jugadorPC, 1, 'B', 3, dimensionTablero); 
+                colocaHorizontal(jugadorPC, 1, 'Z', 4, dimensionTablero); 
+                colocaVertical(jugadorPC, 1, 'P', 5, dimensionTablero); 
                 datosJuego[0] = 30;
                 datosJuego[1] = 14;                
-                verTablero(jugadorPC, dimensionTablero);//NOTA: Para ver el tablero del PC descomentar esta línea de código
+                //verTablero(jugadorPC, dimensionTablero);//NOTA: Para ver el tablero del PC descomentar esta línea de código
                 verTablero(jugadorHumano, dimensionTablero);
                 jugandoPartida(datosJuego, jugadorPC, jugadorHumano, dimensionTablero);        
                 break;
@@ -123,168 +88,85 @@ public class Hundirlaflota {
             case 3://Difícil
                 llenadoInicialTableros(jugadorPC);
                 llenadoInicialTableros(jugadorHumano);
-                colocaHorizontal(jugadorPC, 1, 'L', 1, 10);
-                colocaHorizontal(jugadorPC, 1, 'B', 3, 10);
+                colocaHorizontal(jugadorPC, 1, 'L', 1, dimensionTablero);
+                colocaHorizontal(jugadorPC, 1, 'B', 3, dimensionTablero);
                 datosJuego[0] = 10;
                 datosJuego[1] = 4;
-                verTablero(jugadorPC, dimensionTablero);//NOTA: Para ver el tablero del PC descomentar esta línea de código
+                //verTablero(jugadorPC, dimensionTablero);//NOTA: Para ver el tablero del PC descomentar esta línea de código
                 verTablero(jugadorHumano, dimensionTablero);
                 jugandoPartida(datosJuego, jugadorPC, jugadorHumano, dimensionTablero);        
                 break;
                 
-            case 4://Personalizado     
+            case 4://Nivel Personalizado     
                 do{
-                    System.out.println("Elige dimensión del tablero:\n1: 6x6\n2: 10x10\n3: 15x15");
+                    System.out.println("Elige dimensión del tablero, indicando un número de lado desde 7: 7x7 hasta 20: 20x20");
                     dimensionTablero = input.nextInt();
-                }while(dimensionTablero < 1 || dimensionTablero > 3);
-                if(dimensionTablero == 1)
-                    dimensionTablero = 6;
-                else if(dimensionTablero == 2)
-                    dimensionTablero = 10;
-                else
-                    dimensionTablero = 15;
-                jugadorPC = new char[dimensionTablero][dimensionTablero];
-                jugadorHumano = new char[dimensionTablero][dimensionTablero];
+                }while(dimensionTablero < 7 || dimensionTablero > 20);//Permitimos elegir tablero desde 7x7 hasta 20x20 para poder tener siempre cualquier tipo de barco
+                
+                jugadorPC = new char[dimensionTablero][dimensionTablero];//Damos dimensiones a las matrices con el valor elegido
+                jugadorHumano = new char[dimensionTablero][dimensionTablero];//Damos dimensiones a las matrices con el valor elegido
                 llenadoInicialTableros(jugadorPC);
                 llenadoInicialTableros(jugadorHumano);
-                
-                if(dimensionTablero == 6){
-                    do{
-                        System.out.println("Dime número de Portaaviones del enemigo (ocupan 5 espacios) min 0, máx 1:");
-                        cantidad = input.nextInt();
-                    }while(cantidad < 0 || cantidad > 1);//Hasta que nos de un valor dentro de lo permitido
-                    datosJuego[1] += cantidad * 5;//Calculo y almaceno el nº de casillas ocupadas y por lo tanto el mínimo de misiles para ganar
-                    if(cantidad > 0)//Llamamos a la función sólo si hay que colocar barcos
-                        colocaVertical(jugadorPC, cantidad, 'P', 5, dimensionTablero);//Ponemos el/los barco/s
-                
-                    do{
-                        System.out.println("Dime número de Acorazados del enemigo (ocupan 4 espacios) min 0, máx 1:");
-                        cantidad = input.nextInt();
-                    }while(cantidad < 0 || cantidad > 1);
-                    datosJuego[1] += cantidad * 4;   
-                    if(cantidad > 0)
-                        colocaHorizontal(jugadorPC, cantidad, 'Z', 4, dimensionTablero);
-                
-                    do{
-                        System.out.println("Dime número de Buques del enemigo (ocupan 3 espacios) min 0, máx 2:");
-                        cantidad = input.nextInt();
-                    }while(cantidad < 0 || cantidad > 2);
-                    datosJuego[1] += cantidad * 3;
-                    if(cantidad > 0)
-                        colocaHorizontal(jugadorPC, cantidad, 'B', 3, dimensionTablero);
-                
-                    do{
-                        System.out.println("Dime número de Lanchas del enemigo (ocupa 1 espacio) min 0, máx 5:");
-                        cantidad = input.nextInt();
-                    }while(cantidad < 0 || cantidad > 5);
-                    datosJuego[1] += cantidad * 1;
-                    if(cantidad > 0)
-                        colocaHorizontal(jugadorPC, cantidad, 'L', 1, dimensionTablero);     
 
-                    do{ 
-                        System.out.println("Nº de misiles, mínimo: " + datosJuego[1] + " y máximo 100");
-                        datosJuego[0] = input.nextInt();
-                    }while(datosJuego[0] < datosJuego[1] || datosJuego[0] > 100);//Aseguramos que mínimo lleve los misiles necesarios para hundir todos los barcos sin fallos
+                do{
+                    System.out.println("Dime número de Portaaviones del enemigo (ocupan 5 espacios) min 0, máx " + (dimensionTablero-6) + ":");
+                    cantidad = input.nextInt();//Se limitan las cantidades máximas a valores lógicos en función del tamaño del tablero
+                }while(cantidad < 0 || cantidad > dimensionTablero-6);//Hasta que nos de un valor dentro de lo permitido
+                datosJuego[1] += cantidad * 5;//Calculo y almaceno el nº de casillas ocupadas y por lo tanto el mínimo de misiles para ganar
+                if(cantidad > 0)//Llamamos a la función sólo si hay que colocar barcos
+                    colocaVertical(jugadorPC, cantidad, 'P', 5, dimensionTablero);//Ponemos el/los barco/s
+                
+                do{
+                    System.out.println("Dime número de Acorazados del enemigo (ocupan 4 espacios) min 0, máx " + (dimensionTablero-5) + ":");
+                    cantidad = input.nextInt();
+                }while(cantidad < 0 || cantidad > dimensionTablero-5);
+                datosJuego[1] += cantidad * 4;   
+                if(cantidad > 0)
+                    colocaHorizontal(jugadorPC, cantidad, 'Z', 4, dimensionTablero);
+                
+                do{
+                    System.out.println("Dime número de Buques del enemigo (ocupan 3 espacios) min 0, máx " + (dimensionTablero-5) + ":");
+                    cantidad = input.nextInt();
+                }while(cantidad < 0 || cantidad > dimensionTablero-5);
+                datosJuego[1] += cantidad * 3;
+                if(cantidad > 0)
+                    colocaHorizontal(jugadorPC, cantidad, 'B', 3, dimensionTablero);
+                
+                do{
+                    System.out.println("Dime número de Lanchas del enemigo (ocupa 1 espacio) min 0, máx " + (dimensionTablero-3) + ":");
+                    cantidad = input.nextInt();
+                }while(cantidad < 0 || cantidad > dimensionTablero-3);
+                datosJuego[1] += cantidad * 1;
+                if(cantidad > 0)
+                    colocaHorizontal(jugadorPC, cantidad, 'L', 1, dimensionTablero);     
+
+                do{ 
+                    System.out.println("Nº de misiles, mínimo: " + datosJuego[1] + " y máximo " + (dimensionTablero*dimensionTablero));
+                    datosJuego[0] = input.nextInt();
+                }while(datosJuego[0] < datosJuego[1] || datosJuego[0] > dimensionTablero*dimensionTablero);//Aseguramos que mínimo lleve los misiles necesarios para hundir todos los barcos sin fallos
        
-                    //verTablero(jugadorPC, dimensionTablero);//NOTA: Para ver el tablero del PC descomentar esta línea de código
-                    verTablero(jugadorHumano, dimensionTablero);
-                    jugandoPartida(datosJuego, jugadorPC, jugadorHumano, dimensionTablero);
-                }
-                
-                else if(dimensionTablero == 10){
-                    do{
-                        System.out.println("Dime número de Portaaviones del enemigo (ocupan 5 espacios) min 0, máx 3:");
-                        cantidad = input.nextInt();
-                    }while(cantidad < 0 || cantidad > 3);
-                    datosJuego[1] += cantidad * 5;
-                    if(cantidad > 0)
-                        colocaVertical(jugadorPC, cantidad, 'P', 5, dimensionTablero);
-                
-                    do{
-                        System.out.println("Dime número de Acorazados del enemigo (ocupan 4 espacios) min 0, máx 4:");
-                        cantidad = input.nextInt();
-                    }while(cantidad < 0 || cantidad > 4);
-                    datosJuego[1] += cantidad * 4;   
-                    if(cantidad > 0)
-                        colocaHorizontal(jugadorPC, cantidad, 'Z', 4, dimensionTablero);
-                
-                    do{
-                        System.out.println("Dime número de Buques del enemigo (ocupan 3 espacios) min 0, máx 5:");
-                        cantidad = input.nextInt();
-                    }while(cantidad < 0 || cantidad > 5);
-                    datosJuego[1] += cantidad * 3;
-                    if(cantidad > 0)
-                        colocaHorizontal(jugadorPC, cantidad, 'B', 3, dimensionTablero);
-                
-                    do{
-                        System.out.println("Dime número de Lanchas del enemigo (ocupa 1 espacio) min 0, máx 10:");
-                        cantidad = input.nextInt();
-                    }while(cantidad < 0 || cantidad > 10);
-                    datosJuego[1] += cantidad * 1;
-                    if(cantidad > 0)
-                        colocaHorizontal(jugadorPC, cantidad, 'L', 1, dimensionTablero);     
-
-                    do{ 
-                        System.out.println("Nº de misiles, mínimo: " + datosJuego[1] + " y máximo 100");
-                        datosJuego[0] = input.nextInt();
-                    }while(datosJuego[0] < datosJuego[1] || datosJuego[0] > 100);
-                    
-                    //verTablero(jugadorPC, dimensionTablero);//NOTA: Para ver el tablero del PC descomentar esta línea de código
-                    verTablero(jugadorHumano, dimensionTablero);
-                    jugandoPartida(datosJuego, jugadorPC, jugadorHumano, dimensionTablero);
-                }           
-                       
-                else{
-                    do{
-                        System.out.println("Dime número de Portaaviones del enemigo (ocupan 5 espacios) min 0, máx 5:");
-                        cantidad = input.nextInt();
-                    }while(cantidad < 0 || cantidad > 5);
-                    datosJuego[1] += cantidad * 5;
-                    if(cantidad > 0)
-                        colocaVertical(jugadorPC, cantidad, 'P', 5, dimensionTablero);
-                
-                    do{
-                        System.out.println("Dime número de Acorazados del enemigo (ocupan 4 espacios) min 0, máx 7:");
-                        cantidad = input.nextInt();
-                    }while(cantidad < 0 || cantidad > 7);
-                    datosJuego[1] += cantidad * 4;   
-                    if(cantidad > 0)
-                        colocaHorizontal(jugadorPC, cantidad, 'Z', 4, dimensionTablero);
-                
-                    do{
-                        System.out.println("Dime número de Buques del enemigo (ocupan 3 espacios) min 0, máx 8:");
-                        cantidad = input.nextInt();
-                    }while(cantidad < 0 || cantidad > 8);
-                    datosJuego[1] += cantidad * 3;
-                    if(cantidad > 0)
-                        colocaHorizontal(jugadorPC, cantidad, 'B', 3, dimensionTablero);
-                
-                    do{
-                        System.out.println("Dime número de Lanchas del enemigo (ocupa 1 espacio) min 0, máx 15:");
-                        cantidad = input.nextInt();
-                    }while(cantidad < 0 || cantidad > 15);
-                    datosJuego[1] += cantidad * 1;
-                    if(cantidad > 0)
-                        colocaHorizontal(jugadorPC, cantidad, 'L', 1, dimensionTablero);     
-
-                    do{ 
-                        System.out.println("Nº de misiles, mínimo: " + datosJuego[1] + " y máximo 225");
-                        datosJuego[0] = input.nextInt();
-                    }while(datosJuego[0] < datosJuego[1] || datosJuego[0] > 225);
-       
-                    //verTablero(jugadorPC, dimensionTablero);//NOTA: Para ver el tablero del PC descomentar esta línea de código
-                    verTablero(jugadorHumano, dimensionTablero);
-                    jugandoPartida(datosJuego, jugadorPC, jugadorHumano, dimensionTablero);
-            }                
+                //verTablero(jugadorPC, dimensionTablero);//NOTA: Para ver el tablero del PC descomentar esta línea de código
+                verTablero(jugadorHumano, dimensionTablero);
+                jugandoPartida(datosJuego, jugadorPC, jugadorHumano, dimensionTablero);                
             break;
         }
     }
     
-    //Ver por pantalla cómo está relleno el tablero
+    //Lleno inicial de '-' ambas matrices por filas, tratándolo como vectores cada fila y usar el .fill
+    public static void llenadoInicialTableros(char jugador[][]){
+        for(int i=0; i<jugador.length; i++) 
+            Arrays.fill(jugador[i], '-');//Relleno por filas y no recorriendo la matriz con el método de vectores .fill
+    }
+    
+    //Ver por pantalla cómo está relleno el tablero de forma actualizada en cada llamada
     public static void verTablero(char jugador[][], int dimensionTablero){
+        String cabeceraTableroX = "ABCDEFGHIJKLMNOPQRST";
         
-        if(dimensionTablero == 6){
-            System.out.println("  A B C D E F");//Pongo la cabecera de la matriz del juego
+        if(dimensionTablero >= 7 && dimensionTablero <= 10){//Para tableros hasta 10 filas con 1 dígito a la izquierda 9 de cada fila
+            System.out.print("  ");//Pongo la cabecera de la matriz del juego
+            for(int i=0; i<jugador.length; i++)
+                System.out.print(cabeceraTableroX.charAt(i) + " ");
+            System.out.println();
             for(int i=0; i<jugador.length; i++){
                 System.out.print(i + " "); //Inicio cada fila mostrando el valor de i
                 for(int j=0; j<jugador[i].length; j++){
@@ -294,24 +176,16 @@ public class Hundirlaflota {
             }
         }
         
-        else if(dimensionTablero == 10){
-            System.out.println("  A B C D E F G H I J");
+        else if(dimensionTablero >=11){//Para tableros que mayores a 10 filas con 2 dígitos a la izquierda de las últimas filas
+            System.out.print("   ");//Pongo la cabecera de la matriz del juego
+            for(int i=0; i<jugador.length; i++)
+                System.out.print(cabeceraTableroX.charAt(i) + " ");                
+            System.out.println();
             for(int i=0; i<jugador.length; i++){
-                System.out.print(i + " ");
-                for(int j=0; j<jugador[i].length; j++){
-                    System.out.print(jugador[i][j] + " ");
-                }
-                System.out.println();
-            }
-        }
-        
-        else{
-            System.out.println("   A B C D E F G H I J K L M N Ñ");//Pongo la cabecera de la matriz 
-            for(int i=0; i<jugador.length; i++){
-                if(i<10)
-                    System.out.print(i + "  ");//Inicio cada fila mostrando el valor de i y 2 espacios
+                if(i<=9)
+                    System.out.print(i + "  ");//Dejamos dos espacios laterales hasta llegar al 9
                 else
-                    System.out.print(i + " ");//Inicio cada fila mostrando el valor de i y 1 espacio al pasar de 9 filas para alinearlo
+                   System.out.print(i + " ");//Quitamos un espacio para dejarlo alineado con las filas con una cifra 
                 for(int j=0; j<jugador[i].length; j++){
                     System.out.print(jugador[i][j] + " ");
                 }
@@ -334,7 +208,7 @@ public class Hundirlaflota {
                 entraElBarco = true;//Activo interruptor
             while(entraElBarco){
             do{    
-                fil = numAleaotorio(dimensionTablero);
+                fil = numAleaotorio(dimensionTablero);//Generamos los aleatorios con el máximo del tablero
                 col = numAleaotorio(dimensionTablero);
             }while(col + dimensionBarco > dimensionTablero - 1);//Mientras que las dimensiones del barco desborde la matriz desde su punto de partida
             for(int i = col; i<col + dimensionBarco; i++){//Como el barco cabe, vemos qué hay en esas mismas posiciones
@@ -387,6 +261,36 @@ public class Hundirlaflota {
             }
             }     
             }
+    }
+    
+    //Función que controla la partida, mientras queden misiles o barcos por hundir... estaremos jugando
+    public static void jugandoPartida(int datosJuego[], char jugadorPC[][], char jugadorHumano[][], int dimensionTablero){
+        Scanner input = new Scanner(System.in);
+        char charCoordenadaX = 'z';
+        boolean okCoordenadaX = false;
+        int coordenadaX, coordenadaY;
+        String coordenadasValidasX = "abcdefghijklmnopqrst";//String con las coordenadas válidas en X
+      
+        while(datosJuego[0] > 0 && datosJuego[1] > 0){//Posición 0 tenemos los misiles, posición 1 los impactos
+            //Mostramos marcador de Misiles restantes y los impactos necesarios para la victoria                
+            System.out.println("\nTenemos: " + datosJuego[0] + " misiles y deberíamos dar en el blanco " + datosJuego[1] + " veces para ganar\n");
+            while(okCoordenadaX == false){ //Mientras no me de una coordenada correcta del eje X válida
+                System.out.println("Dame la coordenada de disparo X (A - " + coordenadasValidasX.toUpperCase().charAt(dimensionTablero-1) + ")");
+                charCoordenadaX = input.nextLine().toLowerCase().charAt(0);
+                //A continuación verificamos que lo recogido como char por teclado está dentro del String de coordenadasValidasX
+                if(coordenadasValidasX.indexOf(charCoordenadaX)>=0 && coordenadasValidasX.indexOf(charCoordenadaX)<dimensionTablero)
+                    okCoordenadaX = true;//Si existe, salimos del while.
+            }
+            do{
+                System.out.println("Dame la coordenada de disparo en eje Y (0 - " + (dimensionTablero-1) + ")");
+                coordenadaY = input.nextInt();
+                input.nextLine();
+            }while(coordenadaY < 0 || coordenadaY > (dimensionTablero-1));           
+            
+            coordenadaX = coordenadasValidasX.indexOf(charCoordenadaX);//Obtengo la equivalencia del carácter en coordenada numérica para la matriz
+            disparoMisil(jugadorPC, jugadorHumano, coordenadaX, coordenadaY, datosJuego, dimensionTablero);//Lanzamos el misil con todos los datos
+            okCoordenadaX = false;//Volvemos a poner el "interruptor" a false para entrar a pedir coordenada X
+        }
     }    
     
     //Realizamos verificación de qué hay en las coordenadas recibidas por el usuario al disparar el misil y actuamos
