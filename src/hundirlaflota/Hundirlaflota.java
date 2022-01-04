@@ -269,14 +269,14 @@ public class Hundirlaflota {
         char charCoordenadaX = 'z';
         boolean okCoordenadaX = false;
         int coordenadaX, coordenadaY;
-        String coordenadasValidasX = "abcdefghijklmnopqrst";//String con las coordenadas válidas en X
+        String coordenadasValidasX = "ABCDEFGHIJKLMNOPQRST";//String con las coordenadas válidas en X
       
         while(datosJuego[0] > 0 && datosJuego[1] > 0){//Posición 0 tenemos los misiles, posición 1 los impactos
             //Mostramos marcador de Misiles restantes y los impactos necesarios para la victoria                
             System.out.println("\nTenemos: " + datosJuego[0] + " misiles y deberíamos dar en el blanco " + datosJuego[1] + " veces para ganar\n");
             while(okCoordenadaX == false){ //Mientras no me de una coordenada correcta del eje X válida
-                System.out.println("Dame la coordenada de disparo X (A - " + coordenadasValidasX.toUpperCase().charAt(dimensionTablero-1) + ")");
-                charCoordenadaX = input.nextLine().toLowerCase().charAt(0);
+                System.out.println("Dame la coordenada de disparo X (A - " + coordenadasValidasX.charAt(dimensionTablero-1) + ")");
+                charCoordenadaX = input.nextLine().toUpperCase().charAt(0);
                 //A continuación verificamos que lo recogido como char por teclado está dentro del String de coordenadasValidasX
                 if(coordenadasValidasX.indexOf(charCoordenadaX)>=0 && coordenadasValidasX.indexOf(charCoordenadaX)<dimensionTablero)
                     okCoordenadaX = true;//Si existe, salimos del while.
