@@ -3,7 +3,7 @@ package hundirlaflota;
 /**
  *
  * @author José Vicente Falcó
- * @version 1.0
+ * @version 05.01.2022
  */
 
 import java.util.Scanner;
@@ -27,8 +27,8 @@ public class Hundirlaflota {
             + "- Si destruyes todos los barcos enemigos, ganarás.\n"
             + "- Si gastas tus misiles sin destruir todos los barcos, habrás perdido.\n"
             + "- Marcaremos en tu tablero los disparos al agua con A y los impactos a un barco enemigo con X.\n"
-            + "- Primero te pediremos la coordenada de disparo en el eje X que irá de A a J.\n"
-            + "- Segundo te pediremos la coordenada de disparo en el eje Y que irá de 0 a 9.\n"
+            + "- Primero te pediremos la coordenada de disparo en el eje X en letras.\n"
+            + "- Segundo te pediremos la coordenada de disparo en el eje Y en números.\n"
             + "- Elige el modo de dificultad y empieza el ataque!!");
         
         do{
