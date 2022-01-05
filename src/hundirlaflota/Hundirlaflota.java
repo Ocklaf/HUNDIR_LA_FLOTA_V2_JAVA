@@ -173,28 +173,22 @@ public class Hundirlaflota {
     
     //Ver por pantalla cómo está relleno el tablero de forma actualizada en cada llamada
     public static void verTablero(char jugador[][], int dimensionTablero){
-        String cabeceraTableroX = "ABCDEFGHIJKLMNOPQRST";
-        
-        if(dimensionTablero >= 7 && dimensionTablero <= 10)//Para tableros hasta 10 filas con 1 dígito a la izquierda
-            System.out.print("  ");//Pongo la cabecera de la matriz del juego
-        else //Para tableros de más de 10 filas
-            System.out.print("   ");//Pongo la cabecera de la matriz del juego
-           
-        for(int i=0; i<jugador.length; i++)//Lo usamos para poner la cabecera de letras en función de la longitud de una fila
-            System.out.print(cabeceraTableroX.charAt(i) + " ");
+        String coordenadasY = "ABCDEFGHIJKLMNOPQRST";
+
+        System.out.print("  ");//Espacios laterales iniciales para alinear los los números con los -
+        for(int i=0; i<jugador.length; i++){//Lo usamos para poner la cabecera de letras en función de la longitud de una fila
+            if(i<=9)//Si el dígito es de 0 a 9 dejamos dos espacios para alinear
+            System.out.print(i + "  ");
+            else//Si es mayor a 9, dos dígitos, recortamos un espacio para mantener el alineamiento
+               System.out.print(i + " "); 
+        }
         
         System.out.println();//Tras poner la cabecera hacemos un salto de linea
         
         for(int i=0; i<jugador.length; i++){
-            if(dimensionTablero >= 7 && dimensionTablero <= 10)
-                System.out.print(i + " ");//Dejamos un espacio laterale hasta llegar al 10 de dimensiones de tablero, hasta el número 9
-            else//Si es un tablero mayor
-                if(i<=9)//Hasta la fila 9
-                    System.out.print(i + "  "); //Inicio cada fila mostrando el valor de i más 2 espacios para alinear con cabecera
-                else//A partir del número 10 que son dos dígitos
-                    System.out.print(i + " ");//Recortamos un espacio para alinear con la cabecera
+                System.out.print(coordenadasY.charAt(i) + " ");//Ponemos la letra de la posición i y dejamos un espacio lateral
             for(int j=0; j<jugador[i].length; j++)
-                System.out.print(jugador[i][j] + " ");//Saco por pantalla cada posición de la matriz con su contenido
+                System.out.print(jugador[i][j] + "  ");//Saco por pantalla cada posición de la matriz con su contenido
             
             System.out.println();//Tras cada fila hago un salto de línea
             }       
@@ -276,30 +270,32 @@ public class Hundirlaflota {
     //Función que controla la partida, mientras queden misiles o barcos por hundir... estaremos jugando
     public static void jugandoPartida(int datosJuego[], char jugadorPC[][], char jugadorHumano[][], int dimensionTablero){
         Scanner input = new Scanner(System.in);
-        char charCoordenadaX = 'z';
-        boolean okCoordenadaX = false;
-        int coordenadaX, coordenadaY;
-        String coordenadasValidasX = "ABCDEFGHIJKLMNOPQRST";//String con las coordenadas válidas en X
+        char charCoordenadaY = 'z';
+        boolean okCoordenadaY = false;
+        int coordenadaY, coordenadaX;
+        String coordenadasValidasY = "ABCDEFGHIJKLMNOPQRST";//String con las coordenadas válidas en Y
       
         while(datosJuego[0] > 0 && datosJuego[1] > 0){//Posición 0 tenemos los misiles, posición 1 los impactos
             //Mostramos marcador de Misiles restantes y los impactos necesarios para la victoria                
             System.out.println("\nTenemos: " + datosJuego[0] + " misiles y deberíamos dar en el blanco " + datosJuego[1] + " veces para ganar\n");
-            while(okCoordenadaX == false){ //Mientras no me de una coordenada correcta del eje X válida
-                System.out.println("Dame la coordenada de disparo X (A - " + coordenadasValidasX.charAt(dimensionTablero-1) + ")");
-                charCoordenadaX = input.nextLine().toUpperCase().charAt(0);
-                //A continuación verificamos que lo recogido como char por teclado está dentro del String de coordenadasValidasX
-                if(coordenadasValidasX.indexOf(charCoordenadaX)>=0 && coordenadasValidasX.indexOf(charCoordenadaX)<dimensionTablero)
-                    okCoordenadaX = true;//Si existe, salimos del while.
+ 
+            while(okCoordenadaY == false){ //Mientras no me de una coordenada correcta del eje Y válida
+                System.out.println("Dame la coordenada de disparo Y (A - " + coordenadasValidasY.charAt(dimensionTablero-1) + ")");
+                charCoordenadaY = input.nextLine().toUpperCase().charAt(0);
+                //A continuación verificamos que lo recogido como char por teclado está dentro del String de coordenadasValidasY
+                if(coordenadasValidasY.indexOf(charCoordenadaY)>=0 && coordenadasValidasY.indexOf(charCoordenadaY)<dimensionTablero)
+                    okCoordenadaY = true;//Si existe, salimos del while.
             }
-            do{
-                System.out.println("Dame la coordenada de disparo en eje Y (0 - " + (dimensionTablero-1) + ")");
-                coordenadaY = input.nextInt();
-                input.nextLine();
-            }while(coordenadaY < 0 || coordenadaY > (dimensionTablero-1));           
             
-            coordenadaX = coordenadasValidasX.indexOf(charCoordenadaX);//Obtengo la equivalencia del carácter en coordenada numérica para la matriz
+            do{
+                System.out.println("Dame la coordenada de disparo en eje X (0 - " + (dimensionTablero-1) + ")");
+                coordenadaX = input.nextInt();
+                input.nextLine();
+            }while(coordenadaX < 0 || coordenadaX > (dimensionTablero-1));          
+            
+            coordenadaY = coordenadasValidasY.indexOf(charCoordenadaY);//Obtengo la equivalencia del carácter en coordenada numérica para la matriz
             disparoMisil(jugadorPC, jugadorHumano, coordenadaX, coordenadaY, datosJuego, dimensionTablero);//Lanzamos el misil con todos los datos
-            okCoordenadaX = false;//Volvemos a poner el "interruptor" a false para entrar a pedir coordenada X
+            okCoordenadaY = false;//Volvemos a poner el "interruptor" a false para entrar a pedir coordenada Y
         }
     }    
     
