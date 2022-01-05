@@ -152,7 +152,7 @@ public class Hundirlaflota {
                 colocaHorizontal(jugadorPC, cantidad, 'L', 1, dimensionTablero); 
             
             if(datosJuego[1]==0)
-                System.err.println("ERROR: Por favor, debes introducir mínimo 1 barco para jugar.\n");//Uso err por darle color rojo y destacar
+                System.out.println("ERROR: Por favor, debes introducir mínimo 1 barco para jugar.\n");
         }//Volvemos a preguntar por todos los barcos si se nos ha dicho que 0 en todos los casos
 
             do{ 
@@ -307,7 +307,7 @@ public class Hundirlaflota {
     public static void disparoMisil(char jugadorPC[][], char jugadorHumano[][], int col, int fil, int datosJuego[], int dimensionTablero){
         if(jugadorHumano[fil][col] != 'A' && jugadorHumano[fil][col] != 'X'){//Si la posición recibida no es ni Agua previa ni Tocado previo
             if(jugadorPC[fil][col] == '-'){//Si lo que hay es '-' no ha impactado en barco
-                System.err.println("\nMi Capitán, hemos fallado... AGUA!!!\n");//Uso err por darle color rojo y destacar
+                System.out.println("\nMi Capitán, hemos fallado... AGUA!!!\n");
                 jugadorHumano[fil][col] = 'A';//Introducimos en la misma posición el símbolo del Agua
                 verTablero(jugadorHumano, dimensionTablero);//Actualizamos tablero del jugador
             }
@@ -319,7 +319,7 @@ public class Hundirlaflota {
             }
         }
         else{//Si hemos entrado aquí, era A o X... por lo tanto... repetida la posición 
-            System.err.println("\nMi Capitán, esa posición ya ha sido atacada!! DEME OTRAS COORDENADAS!\n");//Uso err por darle color rojo y destacar
+            System.out.println("\nMi Capitán, esa posición ya ha sido atacada!! DEME OTRAS COORDENADAS!\n");
             verTablero(jugadorHumano, dimensionTablero);
             datosJuego[0] += 1; //Añadimos el misil "lanzado" erróneamente a una posición ya disparada al jugador
         }
@@ -337,7 +337,7 @@ public class Hundirlaflota {
             verTablero(jugadorPC, dimensionTablero);
         }
         else if(datosJuego[0] == 0){//Si no quedan misiles... lamentablemente... FIN             
-            System.err.println("\n\nMi capitán... HEMOS PERDIDO!!... no tenemos más misiles\n"//Uso err por darle color rojo y destacar
+            System.out.println("\n\nMi capitán... HEMOS PERDIDO!!... no tenemos más misiles\n"
                     + "Estas eran las posiciones de nuestro enemigo:\n");
             verTablero(jugadorPC, dimensionTablero);
         }
